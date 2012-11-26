@@ -1,0 +1,6 @@
+Reading list for EPUB:
+
+ * Sigil (User Guide)
+   - only for EPUB2
+ * http://idpf.org/epub/30/spec/epub30-overview.html
+ * 

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+  <head>
+    <title>Lessons learned</title>
+    <meta charset="utf-8" />
+    <style type="text/css">
+      p {
+        text-align: justify;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Lesson 0</h1>
+    <p>So, what did I learn from lesson 0? (Just for the sake of
+    recap, lesson 0 was the declared goal of writing an EPUB(3) from
+    scratch.) I have to say, a number of things can be learned from
+    such small examples. </p>
+
+    <p>First of all, I found <code>epubcheck</code> to be very useful,
+    since it seems to be the only EPUB3 validator that has any hopes
+    of working. It is also somewhat strict, supporting a few different
+    versions and levels of strictness.</p>
+    
+    <p>Two links deserve mention:</p>
+    <ol>
+      <li><code>http://code.google.com/p/epubcheck/</code></li>
+      <li><code>http://code.google.com/p/epub-samples/</code></li>
+    </ol>
+
+    <p>The samples are downloaded with the validator (and some handy
+    scripts), but it's a little unmaintained.</p>
+
+    <ul>
+      <li>The <code>mimetype</code> file: Can <em>only</em> contain
+      the string "application/epub+zip" - no more, no less. Even a
+      trailing newline will cause the validator to yell at you. Good
+      to know.</li>
+      <li>The <code>META-INF/container.xml</code> has a pretty fixed
+      layout, the toplevel <code>container</code> element containing a
+      <code>rootfiles</code> element that in turn contains one or more
+      <code>rootfile</code> elements, naming <code>.opf</code> files.
+      <pre style="white-space: pre">
+&lt;container xmlns="[1]" version="1.0"&gt;
+  &lt;rootfiles&gt;
+    &lt;rootfile full-path="book.opf"
+              media-type="[2]"/&gt;
+  &lt;/rootfiles&gt;
+&lt;/container&gt;
+      </pre>
+      where [1] is <code>smth</code> and [2] is <code>application/oebps-package+xml</code>
+      </li>
+      <li>Standard HTML entities may also not be supported, for
+      instance the <code>&amp;trade;</code> entity is not supported
+      (at least not on the Reader). However, the calibre ebook viewer
+      displayed the symbol nicely enough.</li>
+      <li>For the table of contents, a single declared element in the
+      manifest MUST have the property <code>nav</code>. Exactly why
+      this is so, and what effect it entails, is still unknown to
+      me.</li>
+      <li></li>
+    </ul>
+  </body>
+</html>

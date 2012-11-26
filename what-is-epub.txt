@@ -1,0 +1,113 @@
+What is EPUB?
+=============
+
+I'm trying to figure out what the EPUB format is - especially EPUB3 compared to
+EPUB2 - they seem like they're very similar, so there would be an advantage in
+inspecting both.
+
+EPUB3 changes from EPUB2
+------------------------
+
+The following URL explains the differences from version 3 to 2(.0.1):
+
+  http://idpf.org/epub/30/spec/epub30-changes.html
+
+Basically
+---------
+
+An .epub file is just a zip archive obeying a certain "structure". Apparently
+the "internal" structure of the actual book doesn't matter so much, as long as
+links are correct throughout. 
+
+There are several goals here: One of the first goals is to write an
+EPUB document entirely from scratch (a very small document). This
+resource provides a bunch of EPUB 3 files to play with:
+
+  https://code.google.com/p/epub-samples/  
+
+A second goal is to explore the svg format, and its HTML support.
+
+Structure of the .epub file
+---------------------------
+
+The basic layout of an EPUB file is the following:
+
+  mimetype
+  META-INF/
+    container.xml
+
+### The mimetype file
+
+The mimetype file, simply an extension-less file with the name
+'mimetype', contains the text:
+
+  application/epub+zip
+
+which is the EPUB mimetype.
+
+### META-INF
+
+The most important file in the META-INF folder is the 'container.xml'
+file (Why, I don't know).
+
+Package Document (.opf)
+-----------------------
+
+The package document describes the overall structure of the ebook. It
+has the mimetype 'application/oebps-package+xml
+
+The 'package' element is the root container of the package
+document. It has the following attributes:
+
+ - version: The EPUB version that the publication conforms
+   	    to. Must have the value "3.0" for EPUB3.
+ - unique-identifier: An IDREF that identifies the 'dc:identifier'
+ - xml:lang (optional): Specifies the contents and attribute values
+
+The package element can contain the following elements (in the
+indicated order):
+
+ - metadata (required):
+ - manifest (required): The manifest section lists all the files that
+   are part of the publication, each represented by an <item>.
+
+   An item MUST have attributes id, href and media-type, for example:
+
+     <item id="intro" href="introduction.html" media-type="application/xtml" />
+
+   declares that 'introduction.html' is part of this publication, that
+   it's a HTML file and we've given it the id 'intro'.
+
+ - spine (required): The spine element defines the default reading of
+   the EPUB, by a list of <itemref> elements.
+
+   An itemref has only 'idref' as a required attribute, for example:
+
+     <itemref idref="intro" [linear="yes|no"] [id="..."] [properties="p1 p2"] />
+
+   The other properties are usually not so interesting.
+ - guide (optional/deprecated): The <guide> element has been
+   deprecated.
+ - bindings (optional): TBD.
+
+
+What I want to accomplish
+-------------------------
+Goal 0: Write an .epub file from scratch, no generator whatsoever. Completed.
+        The result is in 'hello-epub'.
+
+Goal 1: Explore possibilites for SVG in EPUB
+
+Goal 2: Explore possibilities for MathML in EPUB
+
+Goal 3: Explore possibilities for conversion from LaTeX to html/epub
+        (something).
+
+
+References
+----------
+
+ http://idpf.org/epub/30/spec/epub30-overview.html
+ http://idpf.org/epub/30/spec/epub30-publications.html
+ http://idpf.org/epub/30/spec/epub30-contentdocs.html
+ 
