@@ -13,14 +13,16 @@
   </metadata>
   <!-- List of all things included in this publication -->
   <manifest>
-    <item href="hello-epub.xhtml"      id="hello-epub" media-type="application/xhtml+xml"/>
-    <item href="lessons-learned.xhtml" id="lesson0"    media-type="application/xhtml+xml"/>
-    <item href="nav.xhtml"             id="nav"        media-type="application/xhtml+xml" properties="nav"/>
+    <item href="hello-epub.xhtml"      id="hello-epub"  media-type="application/xhtml+xml"/>
+    <item href="plan-of-attack.xhtml"  id="attack-plan" media-type="application/xhtml+xml"/>
+    <item href="lessons-learned.xhtml" id="lesson0"     media-type="application/xhtml+xml"/>
+    <item href="nav.xhtml"             id="nav"         media-type="application/xhtml+xml" properties="nav"/>
   </manifest>
   <!-- The spine defines the default reading order -->
   <spine>
     <itemref idref="nav" />
     <itemref idref="hello-epub" />
+    <itemref idref="attack-plan" />
     <itemref idref="lesson0" />
   </spine>
 </package>

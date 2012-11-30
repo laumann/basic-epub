@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+  <head>
+    <title>Hello EPUB!</title>
+    <meta charset="utf-8" />
+  </head>
+
+  <body>
+    <h1>Plan of Attack</h1>
+    <p>The following is the plan of attack I plan to (sort of)
+    follow - at the very least it's a list of topics that I want
+    to touch upon in relation to EPUB</p>
+
+    <ul>
+      <li>EPUB 3 file format (<code>.epub</code>)</li>
+      <li>SVG in EPUB
+	<ul>
+	  <li>Graphviz <code>dot</code> supports output to svg</li>
+	</ul>
+      </li>
+      <li><code>epub:type</code> and its attributes. A good reference
+      would be: <code>http://idpf.org/epub/vocab/structure/</code></li>
+      <li>MathML in EPUB</li>
+      <li>LaTeX conversion to EPUB (probably via HTML)</li>
+    </ul>
+
+    <p>All this should hopefully amount to some sort useful
+    output. The primary idea is to create a tool for working with
+    EPUB files a la Jekyll, where generation of required (simple)
+    files could be automatised to a great degree. Some of these </p>
+
+    <p>But all this is configurable, and needs to be so. For instance,
+    EPUB doesn't care what your <code>.opf</code> file is called, as
+    long as the file specified in <code>META-INF/container.xml</code>
+    exists (and has the correct format). For instance,
+    the <code>mimetype</code> file must be the first file in the
+    archive. so some kind of control over the order of packaging is
+    required.</p>
+  </body>
+</html>
