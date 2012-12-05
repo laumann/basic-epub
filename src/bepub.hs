@@ -1,5 +1,25 @@
 -- | BePub: Basic ePub handling tool.
 
+{-
+Notes to self:
+
+Global opts (command line only), for initialising the tool:
+
+ --config <file>
+ --help
+ --version
+
+Tool opts:
+
+ Options are specific to each command. The following is a list of 
+ available commands:
+
+  - init
+  - pack
+  - gen    <- this one should probably be default
+
+-}
+
 import System.Environment (getProgName, getArgs)
 
 import qualified EpubPack as EpubPack
@@ -27,7 +47,7 @@ main = do
         (_, _, errs)        -> do putStrLn $ concat errs
                                   printUsage
 
-run :: Command -> (Options,[String]) -> IO ()
+run :: Command -> (Config,[String]) -> IO ()
 run "pack" (options,unmatched) = EpubPack.pack options unmatched
 run cmd _
   | cmd `elem` ["-h", "--help"]    = printUsage

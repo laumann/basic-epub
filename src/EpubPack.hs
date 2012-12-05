@@ -29,7 +29,7 @@ putMimetypeFirst arch = case findEntryByPath "mimetype" arch of
 -- it is an error if input path is not specified
 -- If -i is not specified then 'unmatched' must contain at least one entry...
 -- Also option switches take precedence...
-pack :: Options -> [String] -> IO ()
+pack :: Config -> [String] -> IO ()
 pack options unmatched = do 
   archive <- packFiles input (OptRecursive:if verbose then [OptVerbose] else [])
   B.writeFile output (fromArchive archive)
