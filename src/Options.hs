@@ -17,7 +17,7 @@ data Options = Options { optVerbose :: Bool
 
 
 
-defaultOptions = Options { optVerbose = False -- Be verbose?
+defaultOptions = Options { optVerbose = False   -- Be verbose?
                          , optVersion = False   -- Show version?
                          , optHelp    = False   -- Show help?
                          , optInput   = Nothing -- Current directory

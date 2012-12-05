@@ -4,6 +4,8 @@ import System.Environment (getProgName, getArgs)
 
 import qualified EpubPack as EpubPack
 import Options
+import Config
+import MetaInf
 import Data.Maybe (fromMaybe)
 
 type Command = String
