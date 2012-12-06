@@ -10,7 +10,8 @@ import System.FilePath
 import Options
 import Data.Maybe (fromMaybe)
 
---packFiles :: FilePath -> [FilePath] -> [ZipOption]
+packFiles' :: [FilePath] -> IO Archive
+packFiles' fs = addFilesToArchive [OptVerbose] emptyArchive fs
 
 packFiles :: FilePath -> [ZipOption] -> IO Archive
 packFiles f zipOpts = do
