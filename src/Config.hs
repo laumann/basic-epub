@@ -21,7 +21,13 @@ import Data.Yaml
 import Data.Text (pack)
 --import qualified Data.ByteString as BS
 
+{-
+Configuration options:
 
+input directory
+output directory
+output filename
+-}
 data Config = Config { optVerbose  :: Bool
                      , optVersion  :: Bool
                      , optHelp     :: Bool
@@ -31,17 +37,6 @@ data Config = Config { optVerbose  :: Bool
                      , pagesExt    :: String
                      , spine       :: [String]
                      } deriving Show
-
-{-
-defaultConfig = Conf { optVerbose  = False   -- Be verbose?
-                     , optHelp     = False   -- Show help?
-                     , optInput    = Nothing -- Input path (default: current directory)
-                     , optOutput   = Nothing -- Output filename (default: ???)
-                     , contentsDir = Nothing -- The folder in which to find all resources to be included
-                     , pagesExt    = "xhtml" -- The extension on the things that go in the spine
-                     , spine       = []      -- The spine def (ordered list)
-                     }
--}
 
 getConfig :: IO (Maybe Config)
 getConfig = decodeFile "config.yml"
