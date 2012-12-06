@@ -49,6 +49,7 @@ main = do
 
 run :: Command -> (Config,[String]) -> IO ()
 run "pack" (options,unmatched) = EpubPack.pack options unmatched
+run "unpack" (options,unmatched) = EpubPack.unpack options unmatched
 run cmd _
   | cmd `elem` ["-h", "--help"]    = printUsage
   | cmd `elem` ["-V", "--version"] = printVersion
