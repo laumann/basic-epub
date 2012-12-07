@@ -13,19 +13,9 @@ import Data.Maybe (fromMaybe)
 import Text.Printf
 import Control.Monad (when)
 
-packFiles' :: [FilePath] -> IO Archive
-packFiles' fs = addFilesToArchive [OptVerbose] emptyArchive fs
-
-packFiles :: FilePath -> [ZipOption] -> IO Archive
-packFiles f zipOpts = do
-  archive <- doInDirectory f $ do addFilesToArchive zipOpts emptyArchive ["."]
-  return $ putMimetypeFirst archive
-
--- Stupid hack: make sure the mimetype file is the first entry in the archive
-putMimetypeFirst arch = case findEntryByPath "mimetype" arch of
-  Just mt -> let arch' = deleteEntryFromArchive "mimetype" arch
-             in addEntryToArchive mt arch'
-  Nothing -> error "For some reason there's no mimetype file in your epub archive!"
+--------------------------------------------------------------------------------
+-- EpubPack: is module handles (un)packing .epub archives
+--------------------------------------------------------------------------------
 
 -- it is an error if input path is not specified
 -- If -i is not specified then 'unmatched' must contain at least one entry...
@@ -46,7 +36,8 @@ pack options unmatched =
 
 -- | IF: 'bepub pack --help' then display help text.
 packUsage :: IO ()
-packUsage = undefined
+packUsage = do
+  printf "bepub pack "
 
 unpack :: Config -> [String] -> IO ()
 unpack config unmatched =
@@ -57,6 +48,23 @@ unpack config unmatched =
         createDirectoryIfMissing False dir
         zipf <- B.readFile arch
         doInDirectory dir $ do extractFilesFromArchive zipOpts (toArchive zipf)
+
+--------------------------------------------------------------------------------
+-- Internal functions
+--------------------------------------------------------------------------------
+
+packFiles' :: [FilePath] -> IO Archive
+packFiles' fs = addFilesToArchive [OptVerbose] emptyArchive fs
+
+packFiles :: FilePath -> [ZipOption] -> IO Archive
+packFiles f zipOpts = do
+  archive <- doInDirectory f $ do addFilesToArchive zipOpts emptyArchive ["."]
+  return $ putMimetypeFirst archive
+
+putMimetypeFirst arch = case findEntryByPath "mimetype" arch of
+  Just mt -> let arch' = deleteEntryFromArchive "mimetype" arch
+             in addEntryToArchive mt arch'
+  Nothing -> error "For some reason there's no mimetype file in your epub archive!"
 
 doInDirectory :: FilePath -> IO a -> IO a
 doInDirectory path io = do 

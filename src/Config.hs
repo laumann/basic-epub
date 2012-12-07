@@ -19,40 +19,40 @@ module Config (getConfig) where
 
 import Data.Yaml
 import Data.Text (pack)
---import qualified Data.ByteString as BS
 
-{-
-Configuration options:
+data YConfig = YConfig
+               { optVerbose     :: Bool
+               , optVersion     :: Bool
+               , optHelp        :: Bool
+               , identifier     :: String
+               , title          :: String
+               , author         :: String
+               , inputDir       :: Maybe FilePath
+               , outputDir      :: Maybe FilePath
+               , contentsDir    :: FilePath
+               , pagesExt       :: String
+               , spine          :: [String]
+               , nav            :: String
+               } deriving Show
 
-input directory
-output directory
-output filename
--}
-data Config = Config { optVerbose  :: Bool
-                     , optVersion  :: Bool
-                     , optHelp     :: Bool
-                     -- , optInput    :: Maybe FilePath
-                     -- , optOutput   :: Maybe FilePath
-                     , contentsDir :: Maybe FilePath
-                     , pagesExt    :: String
-                     , spine       :: [String]
-                     } deriving Show
-
-getConfig :: IO (Maybe Config)
+getConfig :: IO (Maybe YConfig)
 getConfig = decodeFile "config.yml"
 
 
-parseYamlConfig :: Value -> Parser Config
-parseYamlConfig (Object o) = do
-  verb <- o .:? "verbose" .!= False
-  vers <- o .:? "version" .!= False
-  -- inpd <- o .:? "input-dir" .!= Nothing
-  -- outd <- o .:? "output-file" .!= Nothing
-  cDir <- o .:? "contents-dir"
-  pExt <- o .:? "pages-ext" .!= "xhtml"
+parseYamlYConfig :: Value -> Parser YConfig
+parseYamlYConfig (Object o) = do
+  verb <- o .:? "verbose"      .!= False
+  idnt <- o .:? "identifier"   .!= ""
+  titl <- o .:? "title"        .!= ""
+  auth <- o .:? "author"       .!= "no-author"
+  inpd <- o .:? "input-dir"
+  outd <- o .:? "output-file"
+  cDir <- o .:? "contents-dir" .!= "."
+  pExt <- o .:? "pages-ext"    .!= "xhtml"
   spn  <- o .:  "spine"
-  return $ Config verb vers False cDir pExt spn
+  nav  <- o .:  "nav"
+  return $ YConfig verb False False idnt titl auth inpd outd cDir pExt spn nav
 
 
-instance FromJSON Config where
-  parseJSON = parseYamlConfig
+instance FromJSON YConfig where
+  parseJSON = parseYamlYConfig
