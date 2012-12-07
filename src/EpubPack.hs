@@ -20,11 +20,6 @@ packFiles :: FilePath -> [ZipOption] -> IO Archive
 packFiles f zipOpts = do
   archive <- doInDirectory f $ do addFilesToArchive zipOpts emptyArchive ["."]
   return $ putMimetypeFirst archive
-  -- cwd <- getCurrentDirectory
-  -- setCurrentDirectory f
-  -- archive <- addFilesToArchive zipOpts emptyArchive ["."]
-  -- setCurrentDirectory cwd
-  -- return (putMimetypeFirst archive)
 
 -- Stupid hack: make sure the mimetype file is the first entry in the archive
 putMimetypeFirst arch = case findEntryByPath "mimetype" arch of
@@ -36,33 +31,32 @@ putMimetypeFirst arch = case findEntryByPath "mimetype" arch of
 -- If -i is not specified then 'unmatched' must contain at least one entry...
 -- Also option switches take precedence...
 pack :: Config -> [String] -> IO ()
-pack options unmatched = do 
-  archive <- packFiles input (OptRecursive:if verbose then [OptVerbose] else [])
-  B.writeFile output (fromArchive archive)
-    where (input, output) = case optInput options of
-            Just i -> case optOutput options of 
-              Just o  -> (i, o)
-              Nothing -> (i, (takeBaseName i) ++ ".epub")
-            Nothing -> case unmatched of 
-                         []      -> error "No input file specified..."
-                         [i]     -> (i, (takeBaseName i) ++ ".epub")
-                         [i,o]   -> (i, o)
-                         [i,o,_] -> (i, o)
-          verbose = optVerbose options
+pack options unmatched =
+  let (input, output) = case optInput options of Just i -> case optOutput options of
+                                                   Just o  -> (i, o)
+                                                   Nothing -> (i, (takeBaseName i) ++ ".epub")
+                                                 Nothing -> case unmatched of
+                                                   []      -> error "No input file specified..."
+                                                   [i]     -> (i, (takeBaseName i) ++ ".epub")
+                                                   [i,o]   -> (i, o)
+                                                   [i,o,_] -> (i, o)
+      verbose = optVerbose options
+  in do archive <- packFiles input (OptRecursive:if verbose then [OptVerbose] else [])
+        B.writeFile output (fromArchive archive)
 
 -- | IF: 'bepub pack --help' then display help text.
 packUsage :: IO ()
 packUsage = undefined
 
 unpack :: Config -> [String] -> IO ()
-unpack config unmatched = do
-  printf "Unpacking to '%s'\n" dir
-  createDirectoryIfMissing False dir
-  zipf <- B.readFile arch
-  doInDirectory dir $ do extractFilesFromArchive zipOpts (toArchive zipf)
-    where arch    = fromMaybe "" (optInput config)
-          dir     = fromMaybe (dropExtension arch) (optOutput config)
-          zipOpts = if optVerbose config then [OptVerbose] else []
+unpack config unmatched =
+  let arch    = fromMaybe "" (optInput config)
+      dir     = fromMaybe (dropExtension arch) (optOutput config)
+      zipOpts = if optVerbose config then [OptVerbose] else []
+  in do printf "Unpacking to '%s'\n" dir
+        createDirectoryIfMissing False dir
+        zipf <- B.readFile arch
+        doInDirectory dir $ do extractFilesFromArchive zipOpts (toArchive zipf)
 
 doInDirectory :: FilePath -> IO a -> IO a
 doInDirectory path io = do 
